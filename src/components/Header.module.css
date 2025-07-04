@@ -1,0 +1,48 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    gap: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.logoContainer {
+    flex-shrink: 0;
+    width: 10rem; /* Fixed width for logo */
+}
+
+.logo {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.navigationContainer {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: fit-content;
+    min-width: 0; /* Important for flexbox overflow */
+}
+.menuButton {
+    display: none;
+}
+.buttonContainer {
+    flex-shrink: 0;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+@media (max-width: 768px) {
+    .navigationContainer, 
+    .themeToggleButton, .loginButton {
+        display: none;
+    }
+    .menuButton {
+        display: block;
+    }
+}
