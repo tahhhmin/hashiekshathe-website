@@ -48,6 +48,29 @@ body {
     padding: 0;
     margin: 0;
 }
+section {
+    width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 100vh;
+    padding: 7rem 2rem 2rem 2rem;
+}
+@media (max-width: 1440px) {
+    section {
+        width: 100%;
+        padding: 7rem 2rem 2rem 2rem;
+    }
+}
+@media (max-width: 1000px) {
+    section {
+        flex-direction: column;
+        justify-content: start;
+        padding: 5.5rem 1rem 1rem 1rem;
+        height: fit-content;
+    }
+}
 
 @media (prefers-color-scheme: dark) {
     html {
@@ -84,12 +107,7 @@ body {
 }
 
 /* Typography Elements */
-.hero-text {
-  font-family: var(--font-family);
-  font-size: var(--size-hero-title);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text);
-}
+
 
 h1 {
   font-family: var(--font-family);
@@ -145,3 +163,14 @@ p {
   font-weight: var(--font-weight-regular);
   color: var(--color-text);
 }
+
+label {
+  font-family: var(--font-family);
+  font-size: var(--size-body);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text);
+}
+.muted-text {
+      color: var(--color-muted);
+}
+

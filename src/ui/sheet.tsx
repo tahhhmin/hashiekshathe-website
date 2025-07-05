@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Styles from './sheet.module.css';
-import Button from '@/components/Button';
+import Button from '@/ui/Button';
 import { X } from 'lucide-react';
-import ThemeToggleButton from './buttons/ThemeToggleButton';
+import ThemeToggleButton from '../ui/buttons/ThemeToggleButton';
 
 interface SheetProps {
   buttonIcon: React.ElementType;
@@ -33,6 +33,10 @@ export default function Sheet({
         onClick={() => setOpen(true)}
       />
 
+      {/* === BACKDROP === */}
+      {open && <span className={Styles.backdrop} onClick={() => setOpen(false)}></span>}
+
+      {/* === SHEET === */}
       <div className={`${Styles.sheet} ${open ? Styles.active : ''}`}>
         <div className={Styles.header}>
           <h4>{menuName}</h4>
@@ -51,27 +55,25 @@ export default function Sheet({
           ))}
         </div>
 
-        {footer && <div className={Styles.footer}>
-            {/* These buttons needs to be changed into proper components */}    
-            
+        {footer && (
+          <div className={Styles.footer}>
             <Button
-                variant="primary"
-                label='Donate'
-                onClick={() => console.log('button clicked')}
+              variant="primary"
+              label="Donate"
+              onClick={() => console.log('button clicked')}
             />
             <div className={Styles.footerButton}>
-                <div className={Styles.footerButton1}>
-                    <Button
-                        variant="outlined"
-                        label='Login / Register'
-                        onClick={() => console.log('button clicked')}
-                    />
-                </div>
-
-                <ThemeToggleButton />
+              <div className={Styles.footerButton1}>
+                <Button
+                  variant="outlined"
+                  label="Login / Register"
+                  onClick={() => console.log('button clicked')}
+                />
+              </div>
+              <ThemeToggleButton />
             </div>
-            
-        </div>}
+          </div>
+        )}
       </div>
     </div>
   );

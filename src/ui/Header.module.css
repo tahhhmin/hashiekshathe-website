@@ -7,7 +7,14 @@
     gap: 1rem;
     width: 100%;
     box-sizing: border-box;
+    position: fixed; /* Changed from sticky to fixed */
+    top: 0;
+    left: 0; /* Add this for proper positioning */
+    backdrop-filter: blur(50px);
+
+    z-index: 999;
 }
+
 
 .logoContainer {
     flex-shrink: 0;

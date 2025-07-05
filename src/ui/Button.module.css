@@ -21,7 +21,7 @@
 
 /* Shared icon styles */
 .buttonIcon {
-    color: var(--color-text);
+    color: var(--color-white);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -57,6 +57,9 @@
     background-color: var(--color-card);
     color: var(--color-text);
     border-color: var(--color-border);
+}
+.outlined .buttonIcon {
+    color: var(--color-text);
 }
 
 .outlined:hover {

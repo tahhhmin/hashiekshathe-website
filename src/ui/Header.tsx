@@ -3,12 +3,12 @@ import React from 'react'
 import Styles from './Header.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
-import NavigationMenu, { NavItem } from '@/components/NavigationMenu';
-import Button from '@/components/Button'
-import Sheet from '@/components/sheet';
+import NavigationMenu, { NavItem } from '@/ui/NavigationMenu';
+import Button from '@/ui/Button'
+import Sheet from '@/ui/sheet';
 import { Menu } from 'lucide-react'
 import Logo from '../../public/logo-orange.svg'
-import ThemeToggleButton from './buttons/ThemeToggleButton';
+import ThemeToggleButton from '../ui/buttons/ThemeToggleButton';
 
 const navItems: NavItem[] = [
     { name: 'Home', path: '/' },
