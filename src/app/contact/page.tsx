@@ -35,7 +35,7 @@ export default function Page() {
                     </p>
                 </div>
                 <div className={Styles.footer}>
-                    <Link href="/contact/collaboration-message" className={Styles.footer}>
+                    <Link href="/contact/collaborate" className={Styles.footer}>
                         <Button
                             variant="primary"
                             label="Send Collaboration Message"
