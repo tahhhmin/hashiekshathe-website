@@ -1,24 +1,24 @@
-import React from 'react'
-import Styles from './page.module.css'
-import Link from 'next/link'
-import Button from '@/ui/Button'
+import React from 'react';
+import Styles from './page.module.css';
+import Button from '@/ui/Button';
+import Link from 'next/link';
 
-export default function page() {
+export default function Page() {
     return (
         <section className={Styles.section}>
             <div className={Styles.container}>
                 <div>
-                    <h2>View Donations</h2>
+                    <h2>Register for Hashi Ekshathe!</h2>
                     <p className="muted-text">
                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda a 
                         quisquam temporibus illo. Deserunt.
                     </p>
                 </div>
                 <div className={Styles.footer}>
-                    <Link href="/records/donations" className={Styles.footer}>
+                    <Link href="/volunteer/registration" className={Styles.footer}>
                         <Button
                             variant="primary"
-                            label="View Donations"
+                            label="Proceed to Register"
                             showIcon
 
                         />
@@ -28,17 +28,17 @@ export default function page() {
 
             <div className={Styles.container}>
                 <div>
-                    <h2>View Expenditures</h2>
+                    <h2>View Volunteer Benefits</h2>
                     <p className="muted-text">
                         Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda a 
                         quisquam temporibus illo. Deserunt.
                     </p>
                 </div>
                 <div className={Styles.footer}>
-                    <Link href="/contact/expenditures" className={Styles.footer}>
+                    <Link href="/volunteer/benefits" className={Styles.footer}>
                         <Button
                             variant="primary"
-                            label="View Expenditures"
+                            label="View Benefits"
                             showIcon
 
                         />
@@ -46,5 +46,5 @@ export default function page() {
                 </div>
             </div>
         </section>
-    )
+    );
 }
