@@ -1,6 +1,5 @@
 import React from 'react'
 import Styles from './HeroSection.module.css'
-import { ST } from 'next/dist/shared/lib/utils'
 
 export default function HeroSection() {
     return (
