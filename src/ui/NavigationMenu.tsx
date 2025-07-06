@@ -3,7 +3,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronRight, ChevronLeft, ChevronDown } from 'lucide-react';
 import styles from './NavigationMenu.module.css';
-import Button from '@/ui/Button';
 
 const SCROLL_AMOUNT = 300;
 
