@@ -15,19 +15,19 @@ interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   disabled?: boolean;
-  type?: 
-    | 'text' 
-    | 'email' 
-    | 'password' 
-    | 'date' 
-    | 'datetime-local' 
-    | 'number' 
-    | 'tel' 
-    | 'url' 
+  type?:
+    | 'text'
+    | 'email'
+    | 'password'
+    | 'date'
+    | 'datetime-local'
+    | 'number'
+    | 'tel'
+    | 'url'
     | 'search';
   placeholder?: string;
   showIcon?: boolean;
-  icon?: keyof typeof Icons; // string name like 'User'
+  icon?: keyof typeof Icons; // icon name like 'User', 'Mail'
   showHelpText?: boolean;
   helpText?: string;
 }
@@ -51,8 +51,6 @@ export default function Input({
   const isPassword = type === 'password';
 
   const [calendarOpen, setCalendarOpen] = useState(false);
-
-  // Internal state to keep selected date for placeholder display
   const [selectedDate, setSelectedDate] = useState<Date | null>(
     value ? new Date(value) : null
   );
@@ -62,17 +60,19 @@ export default function Input({
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
-        containerRef.current && 
+        containerRef.current &&
         !containerRef.current.contains(event.target as Node)
       ) {
         setCalendarOpen(false);
       }
     }
+
     if (calendarOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
     }
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -80,19 +80,27 @@ export default function Input({
 
   const getDefaultIconByType = (): React.ElementType | undefined => {
     switch (type) {
-      case 'search': return Icons.Search;
-      case 'url': return Icons.Link;
-      case 'tel': return Icons.Phone;
+      case 'search':
+        return Icons.Search;
+      case 'url':
+        return Icons.Link;
+      case 'tel':
+        return Icons.Phone;
       case 'date':
-      case 'datetime-local': return Icons.Calendar;
-      case 'password': return Icons.Lock;
-      case 'email': return Icons.Mail;
-      case 'number': return Icons.Hash;
-      default: return undefined;
+      case 'datetime-local':
+        return Icons.Calendar;
+      case 'password':
+        return Icons.Lock;
+      case 'email':
+        return Icons.Mail;
+      case 'number':
+        return Icons.Hash;
+      default:
+        return undefined;
     }
   };
 
-  const IconComponent = icon ? Icons[icon] : getDefaultIconByType();
+  const IconComponent = (icon ? Icons[icon] : getDefaultIconByType()) as React.ElementType;
 
   const formatSelectedDate = (date: Date | null): string => {
     if (!date) return '';
@@ -134,17 +142,20 @@ export default function Input({
             <IconComponent className={Styles.icon} size={24} />
           )}
 
-          <input className={Styles.inputelement}
+          <input
+            className={Styles.inputelement}
             id={name}
             name={name}
             type={
-              (type === 'date' || type === 'datetime-local') 
-                ? 'text' 
-                : (isPassword && showPassword ? 'text' : type)
+              type === 'date' || type === 'datetime-local'
+                ? 'text'
+                : isPassword && showPassword
+                ? 'text'
+                : type
             }
             placeholder={
-              !value && (type === 'date' || type === 'datetime-local') 
-                ? formatSelectedDate(selectedDate) || placeholder 
+              !value && (type === 'date' || type === 'datetime-local')
+                ? formatSelectedDate(selectedDate) || placeholder
                 : placeholder
             }
             value={value ?? ''}
@@ -162,39 +173,36 @@ export default function Input({
               style={{ cursor: 'pointer' }}
             />
           )}
-        
-        {calendarOpen && (type === 'date' || type === 'datetime-local') && (
+
+          {calendarOpen && (type === 'date' || type === 'datetime-local') && (
             <div className={Styles.calendarPopup}>
-                <DatePicker
+              <DatePicker
                 selected={selectedDate}
                 onChange={handleDateChange}
                 inline
-                showPopper={false}
                 showTimeSelect={type === 'datetime-local'}
-                dateFormat={type === 'datetime-local' ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'}
+                dateFormat={
+                  type === 'datetime-local' ? 'yyyy-MM-dd HH:mm' : 'yyyy-MM-dd'
+                }
                 timeIntervals={15}
                 calendarClassName={Styles.customDatepicker}
-                />
+              />
             </div>
-        )}
-
-
+          )}
         </div>
-          
+
         {isPassword && (
-        <Button
+          <Button
             variant="icon"
             showIcon
             icon={showPassword ? EyeOff : Eye}
             onClick={togglePassword}
-        />
+          />
         )}
-
-
       </div>
 
       {showHelpText && helpText && (
-        <p className='muted-text'>{helpText}</p>
+        <p className="muted-text">{helpText}</p>
       )}
     </div>
   );

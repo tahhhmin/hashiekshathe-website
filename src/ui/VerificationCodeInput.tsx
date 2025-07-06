@@ -3,8 +3,8 @@ import Styles from './VerificationCodeInput.module.css';
 
 interface VerificationCodeInputProps {
   label?: string;
-  value: string; // Expected to be 6 characters
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string; // Should be a 6-digit string
+  onChange: (value: string) => void;
   helpText?: string;
 }
 
@@ -14,7 +14,7 @@ export default function VerificationCodeInput({
   onChange,
   helpText,
 }: VerificationCodeInputProps) {
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]); // ✅ Mutable array of refs
 
   const focusInput = (index: number) => {
     const input = inputRefs.current[index];
@@ -25,11 +25,13 @@ export default function VerificationCodeInput({
   };
 
   const handleInputChange = (index: number, val: string) => {
-    if (!/^[0-9]?$/.test(val)) return;
+    if (!/^\d?$/.test(val)) return;
 
-    const newOtp = value.split('');
-    newOtp[index] = val;
-    onChange({ target: { value: newOtp.join('') } } as React.ChangeEvent<HTMLInputElement>);
+    const otpArray = value.padEnd(6, ' ').split('');
+    otpArray[index] = val;
+
+    const newValue = otpArray.join('').trim();
+    onChange(newValue);
 
     if (val && index < 5) {
       focusInput(index + 1);
@@ -48,19 +50,18 @@ export default function VerificationCodeInput({
     }
   };
 
-  const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const pasted = e.clipboardData.getData('Text').trim().slice(0, 6);
-    if (!/^\d+$/.test(pasted)) return;
+    if (!/^\d{1,6}$/.test(pasted)) return;
 
-    const newOtp = Array(6).fill('');
-    for (let i = 0; i < 6; i++) {
-      newOtp[i] = pasted[i] || '';
+    const otpArray = Array(6).fill('');
+    for (let i = 0; i < pasted.length; i++) {
+      otpArray[i] = pasted[i];
     }
 
-    onChange({ target: { value: newOtp.join('') } } as React.ChangeEvent<HTMLInputElement>);
-
-    const focusIndex = Math.min(pasted.length, 5);
-    focusInput(focusIndex);
+    onChange(otpArray.join(''));
+    setTimeout(() => focusInput(Math.min(pasted.length, 5)), 0);
   };
 
   useEffect(() => {
@@ -71,24 +72,27 @@ export default function VerificationCodeInput({
     <div className={Styles.otpContainer}>
       {label && <label className={Styles.otpLabel}>{label}</label>}
 
-      <div className={Styles.otpInputWrapper} onPaste={handlePaste}>
+      <div className={Styles.otpInputWrapper}>
         {Array.from({ length: 6 }).map((_, i) => (
           <input
             key={i}
-            ref={(el) => (inputRefs.current[i] = el)}
+            ref={(el) => {
+              inputRefs.current[i] = el;
+            }}
             type="text"
             inputMode="numeric"
             autoComplete="one-time-code"
             maxLength={1}
-            className={`${Styles.otpInput}`}
+            className={Styles.otpInput}
             value={value[i] || ''}
             onChange={(e) => handleInputChange(i, e.target.value)}
             onKeyDown={(e) => handleKeyDown(e, i)}
+            onPaste={handlePaste}
           />
         ))}
       </div>
 
-      {helpText && <p className='muted-text'>{helpText}</p>}
+      {helpText && <p className="muted-text">{helpText}</p>}
     </div>
   );
 }

@@ -27,19 +27,19 @@ export default function Storycard({
     const [IconComponent, setIconComponent] = useState<React.ElementType | null>(null);
 
     useEffect(() => {
-        if (showIcon && icon) {
-            import('lucide-react')
-                .then((icons) => {
-                    const LoadedIcon = icons[icon as keyof typeof icons];
-                    if (LoadedIcon) {
-                        setIconComponent(() => LoadedIcon);
-                    }
-                })
-                .catch((err) => {
-                    console.error(`Failed to load icon: ${icon}`, err);
-                });
-        }
-    }, [icon, showIcon]);
+    if (showIcon && icon) {
+        import('lucide-react')
+            .then((icons) => {
+                const LoadedIcon = icons[icon as keyof typeof icons] as React.ElementType;
+                if (LoadedIcon) {
+                    setIconComponent(() => LoadedIcon);
+                }
+            })
+            .catch((err) => {
+                console.error(`Failed to load icon: ${icon}`, err);
+            });
+    }
+}, [icon, showIcon]);
 
     return (
         <div className={Styles.container}>

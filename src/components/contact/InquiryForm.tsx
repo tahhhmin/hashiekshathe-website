@@ -5,7 +5,7 @@ import Styles from './InquiryForm.module.css'
 import Input from '@/ui/Input'
 import Button from '@/ui/Button'
 import Textarea from '@/ui/Textarea'
-import VerificationCodeInput from '@/ui/VerificationCodeInput'
+
 
 
 export default function InquiryForm() {
@@ -67,12 +67,7 @@ export default function InquiryForm() {
                 </div>
 
                 <div className={Styles.verification}>
-                    <VerificationCodeInput
-                        label="Enter the 6-digit code"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        helpText="We sent a verification code to your email."
-                    />
+ {/*verification code input*/}
                 </div>
 
                 <div className={Styles.formFooter}>
