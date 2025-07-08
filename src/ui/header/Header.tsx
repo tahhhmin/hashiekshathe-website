@@ -11,6 +11,7 @@ import Logo from '../../../public/logo-orange.svg'
 import ThemeToggleButton from '../buttons/ThemeToggleButton';
 import AdminHeader from '@/ui/header/AdminHeader'
 import { usePathname } from 'next/navigation';
+import AuthButton from '../buttons/AuthButton'
 
 const navItems: NavItem[] = [
     { name: 'Home', path: '/' },
@@ -114,11 +115,9 @@ export default function Header() {
                     <div className={Styles.themeToggleButton}>
                         <ThemeToggleButton />
                     </div>
-                    <div className={Styles.loginButton}><Button 
-                        variant="outlined"
-                        label="Register / Login"
-                        onClick={() => console.log('button Clicked')}
-                    /></div>
+                    <div className={Styles.loginButtonContainer}>
+                        <div className={Styles.loginButton}><AuthButton /></div>
+                    </div>
                     <Button 
                         variant="primary"
                         label="Donate"

@@ -71,22 +71,15 @@
 }
 
 .sidebarNavbarItemDropdown {
-  padding-left: 1.75rem;
-  margin-top: 0.25rem;
+    padding-left: 1.75rem;
+
 }
 
 .dropdownListContainer {
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
-.verticalLine {
-  width: 2px;
-  background-color: #e5e7eb;
-  height: 100%;
-}
 
 .dropdownItem {
   padding: 0.25rem 0.5rem;

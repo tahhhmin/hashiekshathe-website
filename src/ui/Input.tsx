@@ -6,7 +6,7 @@ import Styles from './Input.module.css';
 import Button from '@/ui/Button';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Eye, EyeOff, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 interface InputProps {
   label?: string;
@@ -195,7 +195,7 @@ export default function Input({
           <Button
             variant="icon"
             showIcon
-            icon={showPassword ? EyeOff : Eye}
+            icon={showPassword ? 'EyeOff' : 'Eye'}
             onClick={togglePassword}
           />
         )}

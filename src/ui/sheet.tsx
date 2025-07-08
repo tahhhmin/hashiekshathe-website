@@ -17,7 +17,6 @@ interface SheetItem {
 }
 
 export default function Sheet({
-  buttonIcon: Icon,
   menuName,
   footer,
   items = [],
@@ -29,7 +28,7 @@ export default function Sheet({
       <Button
         variant="icon"
         showIcon={true}
-        icon={Icon}
+        icon='Menu'
         onClick={() => setOpen(true)}
       />
 

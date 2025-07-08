@@ -54,6 +54,11 @@
     gap: 0.5rem;
     align-items: center;
 }
+.loginButton {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
 @media (max-width: 768px) {
     .navigationContainer, 
     .themeToggleButton, .loginButton {
