@@ -71,19 +71,23 @@
 /* Variant: Icon */
 .icon {
     background-color: var(--color-card);
-    color: var(--color-white);
+    color: inherit; /* Let children define color */
     padding: 8px;
     border-radius: 8px;
     justify-content: center;
     align-items: center;
     border-color: var(--color-border);
-    display: inline-flex; /* ensure flex context */
+    display: inline-flex;
+}
+
+/* Force icon color inside icon button */
+.icon .buttonIcon {
+    color: var(--color-text);
 }
 
 .icon:hover {
     box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.336);
 }
-
 /* Variant: Action */
 .action {
     background-color: var(--color-green);

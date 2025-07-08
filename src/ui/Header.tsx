@@ -63,6 +63,8 @@ const navItems: NavItem[] = [
         ],
     },
 
+    { name: 'Education', path: '/education', hasDropdown: false,},
+
     { name: "Announcements", path: "/announcements", hasDropdown: false },
 
     { name: "Members", path: "/members", hasDropdown: true,
@@ -115,20 +117,22 @@ export default function Header() {
                     onClick={() => console.log('button Clicked')}
                 />
                 <div className={Styles.menuButton}><Sheet
-                    buttonIcon={Menu}
-                    menuName="Navigation"
-                    footer={true}
-                    items={[
-                        { name: 'Home', path: '/' },
-                        { name: 'About', path: '/about' },
-                        { name: 'Records', path: '/records' },
-                        { name: 'Projects', path: '/projects' },
-                        { name: 'Volunteer', path: '/volunteer' },
-                        { name: 'Announcements', path: '/announcements' },
-                        { name: 'Members', path: '/member' },
-                        { name: 'Contact', path: '/contact' }
-                    ]}
-                /></div>
+                        buttonIcon={Menu}
+                        menuName="Navigation"
+                        footer={true}
+                        items={[
+                            { name: 'Home', path: '/' },
+                            { name: 'About', path: '/about' },
+                            { name: 'Records', path: '/records' },
+                            { name: 'Projects', path: '/projects' },
+                            { name: 'Volunteer', path: '/volunteer' },
+                            { name: 'Education', path: '/education' },
+                            { name: 'Announcements', path: '/announcements' },
+                            { name: 'Members', path: '/member' },
+                            { name: 'Contact', path: '/contact' }
+                        ]}
+                    />
+                </div>
             </div>
         </header>
     )

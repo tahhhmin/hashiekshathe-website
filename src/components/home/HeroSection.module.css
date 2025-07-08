@@ -31,7 +31,7 @@
     line-height: 1.5;
     font-weight: 400;
 }
-.hiddenTtitle {
+.hiddenTitle {
     display: none;
 }
 
@@ -50,6 +50,6 @@
         font-weight: 700;
     }
     .subtitle {
-        display: none;
+        display: block;
     }
 }
