@@ -12,8 +12,8 @@ import Styles from './Footer.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Logo from '../../public/favicon-white.svg';
-import HorizontalDivider from './dividers/HorizontalDivider';
+import Logo from '../../../public/favicon-white.svg';
+import HorizontalDivider from '../dividers/HorizontalDivider';
 
 export default function Footer() {
     return (

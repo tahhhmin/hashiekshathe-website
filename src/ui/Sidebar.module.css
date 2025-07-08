@@ -1,8 +1,7 @@
 .sidebarContainer {
-    margin-top: 4.45rem;
     width: 100%;
     max-width: 250px;
-    height: calc(100vh - 4.45rem);
+    height: 100vh;
     background-color: var(--color-card);
     display: flex;
     flex-direction: column;

@@ -1,6 +1,5 @@
 import React from 'react'
 import Button from '@/ui/Button'
-import { Sun, Moon } from 'lucide-react'
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 
@@ -18,7 +17,7 @@ function ThemeToggleButton() {
         <Button 
             variant="icon"
             showIcon={true}
-            icon={isDark ? Sun : Moon}
+            icon={isDark ? 'Sun' : 'Moon'}
             onClick={() => setTheme(isDark ? 'light' : 'dark')}
         />
     )

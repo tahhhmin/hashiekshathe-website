@@ -61,11 +61,8 @@
 .outlined .buttonIcon {
     color: var(--color-text);
 }
-
 .outlined:hover {
-    background-color: var(--color-gray);
     box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.336);
-    color: var(--color-white);
 }
 
 /* Variant: Icon */
@@ -108,6 +105,14 @@
 
 .danger:hover {
     background-color: var(--color-dark-red);
+}
+
+.submit {
+    background-color: var(--color-light2-gray);
+    color: var(--color-white);
+}
+.submit:hover {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.336);
 }
 
 .button:disabled,

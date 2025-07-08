@@ -160,19 +160,19 @@ export default function InquiryForm() {
         )}
 
         <div className={Styles.formFooter}>
-          <Button
-  type="submit" // ✅ Required to trigger form submission
-  variant="submit" // Optional — just for styling
-  label={
-    loading
-      ? 'Processing...'
-      : step === 'form'
-      ? 'Send Message'
-      : 'Verify Code'
-  }
-  showIcon
-  disabled={loading}
-/>
+            <Button
+                type="submit" // ✅ Required to trigger form submission
+                variant="submit" // Optional — just for styling
+                label={
+                    loading
+                    ? 'Processing...'
+                    : step === 'form'
+                    ? 'Send Message'
+                    : 'Verify Code'
+                }
+                showIcon
+                disabled={loading}
+            />
         </div>
       </form>
     </div>

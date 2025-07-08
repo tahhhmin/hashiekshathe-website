@@ -1,0 +1,10 @@
+.adminHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    gap: 1rem;
+}
+.adminHeader p {
+    margin: auto 0;
+    color: var(--color-white);
+} 

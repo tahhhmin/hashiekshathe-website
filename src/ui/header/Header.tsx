@@ -7,8 +7,10 @@ import NavigationMenu, { NavItem } from '@/ui/NavigationMenu';
 import Button from '@/ui/Button'
 import Sheet from '@/ui/sheet';
 import { Menu } from 'lucide-react'
-import Logo from '../../public/logo-orange.svg'
-import ThemeToggleButton from '../ui/buttons/ThemeToggleButton';
+import Logo from '../../../public/logo-orange.svg'
+import ThemeToggleButton from '../buttons/ThemeToggleButton';
+import AdminHeader from '@/ui/header/AdminHeader'
+import { usePathname } from 'next/navigation';
 
 const navItems: NavItem[] = [
     { name: 'Home', path: '/' },
@@ -88,52 +90,66 @@ const navItems: NavItem[] = [
 
 export default function Header() {
 
+    const ifAdmin = true;
+
+    const pathname = usePathname();
+    const isDashboard = pathname === '/dashboard';
+
     return (
         <header className={Styles.header}>
             {/* Logo Container */}
-            <div className={Styles.logoContainer}>
-                <Link href={'/'}><Image className={Styles.logo}
-                        src={Logo}
-                        alt="Logo"
-                /></Link>
-            </div>
-            {/* Navigation Container */}
-            <div className={Styles.navigationContainer}>
-                <NavigationMenu navItems={navItems} />
-            </div>
-            {/* Button Container */}
-            <div className={Styles.buttonContainer}>
-                <div className={Styles.themeToggleButton}>
-                    <ThemeToggleButton />
+            <div className={Styles.userHeader}>
+                <div className={Styles.logoContainer}>
+                    <Link href={'/'}><Image className={Styles.logo}
+                            src={Logo}
+                            alt="Logo"
+                    /></Link>
                 </div>
-                <div className={Styles.loginButton}><Button 
-                    variant="outlined"
-                    label="Register / Login"
-                    onClick={() => console.log('button Clicked')}
-                /></div>
-                <Button 
-                    variant="primary"
-                    label="Donate"
-                    onClick={() => console.log('button Clicked')}
-                />
-                <div className={Styles.menuButton}><Sheet
-                        buttonIcon={Menu}
-                        menuName="Navigation"
-                        footer={true}
-                        items={[
-                            { name: 'Home', path: '/' },
-                            { name: 'About', path: '/about' },
-                            { name: 'Records', path: '/records' },
-                            { name: 'Projects', path: '/projects' },
-                            { name: 'Volunteer', path: '/volunteer' },
-                            { name: 'Education', path: '/education' },
-                            { name: 'Announcements', path: '/announcements' },
-                            { name: 'Members', path: '/member' },
-                            { name: 'Contact', path: '/contact' }
-                        ]}
+                {/* Navigation Container */}
+                <div className={Styles.navigationContainer}>
+                    <NavigationMenu navItems={navItems} />
+                </div>
+                {/* Button Container */}
+                <div className={Styles.buttonContainer}>
+                    <div className={Styles.themeToggleButton}>
+                        <ThemeToggleButton />
+                    </div>
+                    <div className={Styles.loginButton}><Button 
+                        variant="outlined"
+                        label="Register / Login"
+                        onClick={() => console.log('button Clicked')}
+                    /></div>
+                    <Button 
+                        variant="primary"
+                        label="Donate"
+                        onClick={() => console.log('button Clicked')}
                     />
+                    <div className={Styles.menuButton}><Sheet
+                            buttonIcon={Menu}
+                            menuName="Navigation"
+                            footer={true}
+                            items={[
+                                { name: 'Home', path: '/' },
+                                { name: 'About', path: '/about' },
+                                { name: 'Records', path: '/records' },
+                                { name: 'Projects', path: '/projects' },
+                                { name: 'Volunteer', path: '/volunteer' },
+                                { name: 'Education', path: '/education' },
+                                { name: 'Announcements', path: '/announcements' },
+                                { name: 'Members', path: '/member' },
+                                { name: 'Contact', path: '/contact' }
+                            ]}
+                        />
+                    </div>
                 </div>
             </div>
+
+            {ifAdmin && !isDashboard && (
+                <div className={Styles.adminHeader}>
+                <AdminHeader />
+                </div>
+            )}
+
         </header>
     )
 }

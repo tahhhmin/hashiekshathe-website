@@ -1,0 +1,24 @@
+.dashboard {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+.content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.dashboardHeader {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+}
+.dashboardContent {
+    background-color: var(--color-card);
+
+    height: 100%;
+    margin: 0 1rem 1rem 1rem;
+    border-radius: 12px;
+
+}

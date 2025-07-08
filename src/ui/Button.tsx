@@ -1,6 +1,8 @@
+'use client';
+
 import React from 'react';
+import * as LucideIcons from 'lucide-react';
 import Styles from './Button.module.css';
-import { CircleArrowRight } from 'lucide-react';
 
 type ButtonVariant =
   | 'primary'
@@ -9,15 +11,15 @@ type ButtonVariant =
   | 'icon'
   | 'action'
   | 'danger'
-  | 'submit'; // ✅ Style only
+  | 'submit';
 
 interface ButtonProps {
   variant?: ButtonVariant;
   label?: string;
   showIcon?: boolean;
-  icon?: React.ElementType;
+  icon?: string; // Icon name as string
   disabled?: boolean;
-  type?: 'button' | 'submit' | 'reset'; // Controls form behavior
+  type?: 'button' | 'submit' | 'reset';
   onClick?: () => void;
 }
 
@@ -25,12 +27,15 @@ export default function Button({
   variant = 'primary',
   label,
   showIcon,
-  icon: Icon,
-  type = 'button', // ✅ Default is now 'button', so no accidental submits
-  disabled,
+  icon,
+  type = 'button',
+  disabled = false,
   onClick,
 }: ButtonProps) {
-  const IconToRender = Icon || CircleArrowRight;
+  const IconComponent = (icon && icon in LucideIcons
+    ? LucideIcons[icon as keyof typeof LucideIcons]
+    : LucideIcons.CircleArrowRight) as React.ElementType;
+
   const buttonClassName = `${Styles.button} ${Styles[variant] || ''}`;
 
   return (
@@ -39,10 +44,12 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
       type={type}
-      aria-label={!label && showIcon ? 'button icon' : undefined}
+      aria-label={!label && showIcon ? 'button icon' : label}
     >
       {label && <span>{label}</span>}
-      {showIcon && <IconToRender className={Styles.buttonIcon} size={24} />}
+      {showIcon && IconComponent && (
+        <IconComponent className={Styles.buttonIcon} size={24} />
+      )}
     </button>
   );
 }
