@@ -91,7 +91,7 @@ const navItems: NavItem[] = [
 
 export default function Header() {
 
-    const ifAdmin = true;
+    const ifAdmin = false;
 
     const pathname = usePathname();
     const isDashboard = pathname === '/dashboard';

@@ -2,32 +2,56 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import Styles from './page.module.css'
 
 export default async function ProfilePage() {
-  const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
-  if (!session) {
-    redirect("/login");
-  }
+    if (!session) {
+        redirect("/login");
+    }
 
-  const { name, email, image } = session.user || {};
+    const { name, email, image } = session.user || {};
 
-  return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4">Profile Page</h1>
+    return (
+        <section className={Styles.profilePage}>
+            <div className={Styles.profilePageIdentity}>
+                <div className={Styles.IdentityContainer}>
+                    <div className={Styles.avatarContainer}>
+                        <Image className={Styles.avatar}
+                            src={image || "/default-avatar.png"}
+                            width={86}
+                            height={86}
+                            alt="avatar"
+                        />
+                    </div>
+                    <div className={Styles.userMetadata}>
+                        <h1>{name}</h1>
+                        <p className={Styles.username}>@tahhhmin</p>
+                        <p className="muted-text">{email}</p>
+                    </div>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                    Temporibus quasi ex, autem id beatae cumque dolorum 
+                    provident nesciunt, error repellat, excepturi officia 
+                    tenetur tempora? Eveniet fugit vitae quo a laborum!
+                </p>
+            </div>
 
-      {image && (
-        <Image
-          src={image}
-          alt="User Image"
-          width={80}
-          height={80}
-          className="rounded-full"
-        />
-      )}
+            <div className={Styles.profilePageNav}>
+                {/* 
+                    pfp, name, email
+                */}
 
-      <p className="mt-2 text-lg">Name: {name}</p>
-      <p className="text-lg">Email: {email}</p>
-    </main>
+            </div>
+
+            <div className={Styles.profilePageContent}>
+                {/* 
+                    pfp, name, email
+                */}
+
+            </div>
+        </section>
   );
 }
