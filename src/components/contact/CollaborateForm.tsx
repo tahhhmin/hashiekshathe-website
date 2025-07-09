@@ -3,8 +3,6 @@
 import React, { useState } from 'react';
 import Input from '@/ui/Input';
 import Button from '@/ui/Button';
-import Textarea from '@/ui/Textarea';
-import VerificationCodeInput from '@/ui/VerificationCodeInput';
 import Styles from './CollaborateForm.module.css'
 
 function CollaborateForm() {

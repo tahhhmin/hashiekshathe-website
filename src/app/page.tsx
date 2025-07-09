@@ -1,11 +1,12 @@
 
 import HeroSection from "@/components/home/HeroSection";
-import AuthButton from "@/ui/buttons/AuthButton";
+import SocialSection from "@/components/home/SocialSection";
 
 export default function Home() {
     return (
         <>
             <HeroSection />
+            <SocialSection />
         </>
 
     );
