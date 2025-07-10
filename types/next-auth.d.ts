@@ -1,4 +1,3 @@
-// types/next-auth.d.ts
 import NextAuth from "next-auth";
 
 declare module "next-auth" {
@@ -23,7 +22,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
-    id: string;
-    isAdmin: boolean;
+    id?: string;
+    isAdmin?: boolean;
   }
 }

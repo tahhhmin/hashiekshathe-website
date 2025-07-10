@@ -1,29 +1,25 @@
-// models/User.ts
-import mongoose from "mongoose";
+// src/models/Users.ts
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  image: {
-    type: String,
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-}, {
-  timestamps: true,
-});
+import mongoose, { Document, Model, Schema } from "mongoose";
 
-export const User = mongoose.models.User || mongoose.model("User", UserSchema);
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  image?: string;
+  isAdmin?: boolean;
+  createdAt: Date;
+}
+
+const UserSchema: Schema<IUser> = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    image: { type: String },
+    isAdmin: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now },
+  },
+  { timestamps: true }
+);
+
+export const User: Model<IUser> =
+  mongoose.models.User || mongoose.model<IUser>("User", UserSchema);

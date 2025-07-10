@@ -1,3 +1,5 @@
+// tsconfig.json
+
 {
   "compilerOptions": {
     "target": "ES2017",
@@ -27,11 +29,11 @@
     ]
   },
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "types/next-auth.d.ts.ts" // ✅ explicitly include custom type extension
-  ],
+  "next-env.d.ts",
+  "**/*.ts",
+  "**/*.tsx",
+  ".next/types/**/*.ts",
+  "types" // ✅ includes all files inside types/, including next-auth.d.ts
+],
   "exclude": ["node_modules"]
 }

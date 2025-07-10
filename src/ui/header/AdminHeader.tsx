@@ -1,3 +1,6 @@
+// src/ui/header/AdminHeader.tsx
+// it is the component button that leads to dashboard
+
 import React from 'react'
 import Button from '@/ui/Button'
 import Styles from './AdminHeader.module.css'

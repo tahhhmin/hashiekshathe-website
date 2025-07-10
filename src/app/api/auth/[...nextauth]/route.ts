@@ -1,11 +1,15 @@
+// src/app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "@/lib/mongoDB";
-import { connectDB } from "@/lib/connectDB";
-import { User } from "@/models/User";
 import type { NextAuthOptions } from "next-auth";
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET } from "@/lib/env";
+import {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  NEXTAUTH_SECRET,
+} from "@/lib/env";
+import { ObjectId } from "mongodb";
 
 export const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
@@ -16,43 +20,73 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   secret: NEXTAUTH_SECRET,
+
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
+      const client = await clientPromise;
+      const db = client.db();
+      const usersCollection = db.collection("users");
 
-        await connectDB();
-        const dbUser = await User.findById(user.id).lean();
+      // On first login, set token.id from user
+      if (user) {
+        token.id = user.id || (user as any)._id;
+      }
+
+      if (token.id) {
+        const dbUser = await usersCollection.findOne({
+          _id: new ObjectId(token.id),
+        });
+
         token.isAdmin = dbUser?.isAdmin ?? false;
       }
+
       return token;
     },
 
     async session({ session, token }) {
-      if (session?.user) {
-        session.user.id = token.id;
-        session.user.isAdmin = token.isAdmin;
+      if (session.user && token?.id) {
+        session.user.id = token.id as string;
+        session.user.isAdmin = token.isAdmin ?? false;
       }
+
+      console.log("Session callback - session.user:", session.user);
       return session;
     },
   },
+
+  events: {
+    async signIn({ user }) {
+      const client = await clientPromise;
+      const db = client.db();
+      const usersCollection = db.collection("users");
+
+      const userId = user.id || (user as any)._id;
+      const objUserId = new ObjectId(userId);
+
+      const existingUser = await usersCollection.findOne({
+        _id: objUserId,
+      });
+
+      if (existingUser) {
+        const updateData: Record<string, any> = {};
+
+        if (existingUser.isAdmin === undefined) {
+          updateData.isAdmin = false;
+        }
+
+        if (Object.keys(updateData).length > 0) {
+          await usersCollection.updateOne(
+            { _id: objUserId },
+            { $set: updateData }
+          );
+          console.log("User fields updated on signIn:", updateData);
+        }
+      }
+    },
+  },
+
   pages: {
     signIn: "/login",
-  },
-  events: {
-    async createUser({ user }) {
-      await connectDB();
-      await User.findByIdAndUpdate(
-        user.id,
-        {
-          $setOnInsert: {
-            isAdmin: false,
-            createdAt: new Date(),
-          },
-        },
-        { upsert: true }
-      );
-    },
   },
 };
 

@@ -16,6 +16,10 @@ interface SidebarSection {
   items: SidebarItem[];
 }
 
+// ✅ Export it so page.tsx can import and use it
+export type { SidebarSection };
+
+
 interface SidebarHeader {
   logo: string;
   title: string;
