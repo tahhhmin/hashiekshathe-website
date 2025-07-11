@@ -1,3 +1,5 @@
+// src/lib/env.ts
+
 function getEnvVar(name: string): string {
   const value = process.env[name];
   if (!value) {

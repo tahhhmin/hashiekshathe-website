@@ -96,14 +96,6 @@ export default function Header() {
     }
   }, [status, session]);
 
-  
-  console.log("Session data:", session);
-  console.log("Session user isAdmin:", session?.user?.isAdmin);
-  console.log("Session user name:", session?.user?.name);
-
-
-
-
   return (
     <header className={Styles.header}>
       <div className={Styles.userHeader}>

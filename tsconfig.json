@@ -24,7 +24,7 @@
       "@/*": ["./src/*"]
     },
     "typeRoots": [
-      "types",          // ✅ so TypeScript picks up your custom types
+      "types",       
       "./node_modules/@types"
     ]
   },
@@ -33,7 +33,7 @@
   "**/*.ts",
   "**/*.tsx",
   ".next/types/**/*.ts",
-  "types" // ✅ includes all files inside types/, including next-auth.d.ts
+  "types"
 ],
   "exclude": ["node_modules"]
 }

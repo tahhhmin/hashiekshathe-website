@@ -1,3 +1,5 @@
+// types/next-auth.d.ts
+
 import NextAuth from "next-auth";
 
 declare module "next-auth" {
@@ -7,7 +9,7 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
-      isAdmin: boolean;
+      isAdmin: boolean; // FIXED: Removed optional ? to make it required
     };
   }
 
