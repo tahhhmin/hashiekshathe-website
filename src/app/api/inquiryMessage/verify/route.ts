@@ -1,11 +1,13 @@
+// Verify code and save message
+
 import { NextRequest, NextResponse } from 'next/server';
-import ContactMessage from '@/models/contactMessage.model';
+import ContactMessage from '@/models/InquiryMessage.model';
 import { sendEmail } from '@/utils/sendMail';
 import { connectDB } from '@/lib/connectDB'; 
 
 export async function POST(req: NextRequest) {
   try {
-    await connectDB(); // <-- make sure DB is connected first
+    await connectDB();
 
     const {
       email,
@@ -39,7 +41,7 @@ export async function POST(req: NextRequest) {
 
     await message.save();
 
-    await sendEmail('contactMessageConfirmation', { to: message.email });
+    await sendEmail('inquiryMessageConfirmation', { to: message.email });
 
     return NextResponse.json({ success: true, message: 'Message successfully verified and saved' });
   } catch (error: any) {

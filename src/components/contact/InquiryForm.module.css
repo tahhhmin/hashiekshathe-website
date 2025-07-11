@@ -5,7 +5,12 @@
     flex-direction: column;
 }
 .inquiryFormContainer {
-        width: 100%;
+    width: 100%;
+}
+.formInput {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 .inquiryForm {
     width: 100%;

@@ -5,7 +5,7 @@ function CollaborateFormDetails() {
   return (
         <div className={Styles.container}>
             <div>
-                <h2>Inquiry Form Details</h2>
+                <h2>Collaborate Form Details</h2>
                 <p className='muted-text'>Details</p>
             </div>
         </div>

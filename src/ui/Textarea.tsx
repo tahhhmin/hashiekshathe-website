@@ -33,7 +33,6 @@ export default function Textarea({
         {label && (
             <label htmlFor={textareaId} className={Styles.label}>
             {label}
-            {required && <span className={Styles.required}> *</span>}
             </label>
         )}
 

@@ -11,6 +11,7 @@ export default function InquiryForm() {
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  
   const [code, setCode] = useState('');
   const [step, setStep] = useState<'form' | 'verify'>('form');
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function InquiryForm() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/contact/submit', {
+      const res = await fetch('/api/inquiryMessage/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, subject, userMessage: message }),
@@ -62,7 +63,7 @@ export default function InquiryForm() {
     setLoading(true);
 
     try {
-      const res = await fetch('/api/contact/verify', {
+      const res = await fetch('/api/inquiryMessage/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -117,6 +118,7 @@ export default function InquiryForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               showIcon
+              icon="Mail"
               showHelpText
               helpText="Enter a valid email address."
               required
@@ -150,29 +152,30 @@ export default function InquiryForm() {
         {step === 'verify' && (
           <div className={Styles.verification}>
             <VerificationCodeInput
-              value={code}
-              onChange={setCode}
-              length={6}
-              autoFocus
-              helpText="Enter the 6-digit code sent to your email."
+                label='Enter Verification Code'
+                value={code}
+                onChange={setCode}
+                length={6}
+                autoFocus
+                helpText="Enter the 6-digit code sent to your email."
             />
           </div>
         )}
 
         <div className={Styles.formFooter}>
-            <Button
-                type="submit" // ✅ Required to trigger form submission
-                variant="submit" // Optional — just for styling
-                label={
-                    loading
-                    ? 'Processing...'
-                    : step === 'form'
-                    ? 'Send Message'
-                    : 'Verify Code'
-                }
-                showIcon
-                disabled={loading}
-            />
+          <Button
+            type="submit"
+            variant="submit"
+            label={
+              loading
+                ? 'Processing...'
+                : step === 'form'
+                ? 'Send Message'
+                : 'Verify Code'
+            }
+            showIcon
+            disabled={loading}
+          />
         </div>
       </form>
     </div>

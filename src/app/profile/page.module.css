@@ -8,7 +8,6 @@
     flex-direction: column;
 }
 .mainContainer {
-    background-color: brown;
     overflow: hidden;
 }
 .sideContainer {

@@ -1,11 +1,13 @@
-.otpInputWrapper {
+.otpContainer {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 0.25rem 0;
-    flex-wrap: wrap; /* Optional for mobile responsiveness */
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
+.otpInputWrapper {
+    display: flex;
+    gap: 0.5rem;
+}
 .otpInput {
     background-color: var(--color-input);
     color: var(--color-muted);
@@ -21,7 +23,6 @@
     box-sizing: border-box;
     transition: box-shadow 0.2s ease;
 }
-
 .otpInput:focus {
     outline: none;
   	box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.336);

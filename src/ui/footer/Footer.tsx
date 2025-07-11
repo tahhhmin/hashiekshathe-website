@@ -37,42 +37,18 @@ export default function Footer() {
                     <Link href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon={faYoutube} className={Styles.fontawesomeIcon} />
                     </Link>
-                    <Link href="https://www.x.com" target="_blank" rel="noopener noreferrer">
-                        <FontAwesomeIcon icon={faXTwitter} className={Styles.fontawesomeIcon} />
-                    </Link>
                     <Link href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
                         <FontAwesomeIcon icon={faLinkedin} className={Styles.fontawesomeIcon} />
                     </Link>
                 </div>
             </div>
 
-            <div className={Styles.content}>
-                <div className={Styles.contentContact}>
-                    <h2 className={Styles.text}>Keep in the loop with the Hashi Ekshathe newsletter.</h2>
-                    <input
-                        className={Styles.footerInput}
-                        type="email"
-                        placeholder="example@gmail.com"
-                    />
-                </div>
-
-                <div className={Styles.contentText}>
-                    <h3>Who We Are</h3>
-                    <p>
-                        Hashi Ekshathe is a student-led initiative working to uplift underprivileged
-                        communities through sustainable projects and active youth involvement.
-                        Stay connected to witness our journey of impact and change.
-                    </p>
-                </div>
-            </div>
-
-            <HorizontalDivider backgroundColor="var(--color-white)" />
-
             <div className={Styles.footerFooter}>
                 <p>&copy; 2025 Hashi Ekshathe. All Rights Reserved.</p>
+                <a href="#">Organisational Constitution</a>
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms & Services</a>
-                <a href="#">Organisational Code</a>
+
             </div>
         </footer>
     );
