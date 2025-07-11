@@ -1,5 +1,4 @@
 // types/next-auth.d.ts
-
 import NextAuth from "next-auth";
 
 declare module "next-auth" {
@@ -9,7 +8,9 @@ declare module "next-auth" {
       name?: string | null;
       email?: string | null;
       image?: string | null;
-      isAdmin: boolean; // FIXED: Removed optional ? to make it required
+      isAdmin: boolean;
+      createdAt: Date;
+      // Add any other custom fields here
     };
   }
 
@@ -19,6 +20,8 @@ declare module "next-auth" {
     email?: string | null;
     image?: string | null;
     isAdmin?: boolean;
+    createdAt?: Date;
+    // Add any other custom fields here
   }
 }
 
@@ -26,5 +29,8 @@ declare module "next-auth/jwt" {
   interface JWT {
     id?: string;
     isAdmin?: boolean;
+    createdAt?: Date;
+    lastFetch?: number;
+    // Add any other custom fields here
   }
 }

@@ -1,20 +1,19 @@
 // src/app/api/auth/[...nextauth]/route.ts
-// ALTERNATIVE APPROACH: Using database sessions instead of JWT
+// OPTIMIZED APPROACH: Using JWT sessions with efficient user data fetching
 
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "@/lib/mongoDB";
 import type { NextAuthOptions } from "next-auth";
 import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   NEXTAUTH_SECRET,
 } from "@/lib/env";
+import clientPromise from "@/lib/mongoDB";
 import { ObjectId } from "mongodb";
 
 export const authOptions: NextAuthOptions = {
-  adapter: MongoDBAdapter(clientPromise),
+  // Remove adapter to use JWT sessions
   providers: [
     GoogleProvider({
       clientId: GOOGLE_CLIENT_ID,
@@ -22,107 +21,96 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   secret: NEXTAUTH_SECRET,
-  // FIXED: Use database sessions (default with adapter) and modify session callback accordingly
-
-  callbacks: {
-    // FIXED: For database sessions, we use the session callback differently
-    async session({ session, user }) {
-      console.log('🟢 SESSION CALLBACK START (Database Session)');
-      console.log('Session - Initial session:', JSON.stringify(session, null, 2));
-      console.log('Session - User from database:', JSON.stringify(user, null, 2));
-      
-      if (session.user && user) {
-        // FIXED: Get isAdmin from database user object
-        const client = await clientPromise;
-        const db = client.db();
-        const usersCollection = db.collection("users");
-        
-        const userId = user.id;
-        console.log('Session - Looking up user with ID:', userId);
-        
-        let objUserId;
-        try {
-          objUserId = typeof userId === 'string' ? new ObjectId(userId) : userId;
-        } catch (error) {
-          console.error('❌ Session - Error converting userId to ObjectId:', error);
-          return session;
-        }
-
-        const dbUser = await usersCollection.findOne({
-          _id: objUserId,
-        });
-
-        console.log('Session - Database user found:', JSON.stringify(dbUser, null, 2));
-        console.log('Session - dbUser.isAdmin:', dbUser?.isAdmin);
-        
-        session.user.id = user.id;
-        session.user.isAdmin = dbUser?.isAdmin ?? false;
-        
-        console.log('Session - Final session.user.isAdmin:', session.user.isAdmin);
-      }
-
-      console.log('Session - Final session.user:', JSON.stringify(session.user, null, 2));
-      console.log('🟢 SESSION CALLBACK END\n');
-      return session;
-    },
+  
+  // Use JWT strategy for better performance
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
 
-  events: {
-    async signIn({ user }) {
-      console.log('🟡 SIGNIN EVENT START');
-      console.log('SignIn - User object:', JSON.stringify(user, null, 2));
-      
-      const client = await clientPromise;
-      const db = client.db();
-      const usersCollection = db.collection("users");
+  callbacks: {
+    // JWT callback - runs whenever JWT is created/accessed
+    async jwt({ token, user, trigger }) {
+      console.log('🟢 JWT CALLBACK START');
+      console.log('JWT - Trigger:', trigger);
+      console.log('JWT - Token:', JSON.stringify(token, null, 2));
+      console.log('JWT - User:', JSON.stringify(user, null, 2));
 
-      const userId = user.id || (user as any)._id;
-      console.log('SignIn - userId extracted:', userId);
-      console.log('SignIn - userId type:', typeof userId);
+      // On sign in, user object is available
+      if (user) {
+        console.log('JWT - First time sign in, fetching user data');
+        const userData = await fetchUserData(user.email!);
+        
+        token.id = userData.id;
+        token.email = userData.email;
+        token.name = userData.name;
+        token.image = userData.image;
+        token.isAdmin = userData.isAdmin;
+        token.createdAt = userData.createdAt;
+        // Add any other custom fields here
+        
+        console.log('JWT - Updated token with user data:', JSON.stringify(token, null, 2));
+      }
+
+      // Optionally refresh user data periodically (e.g., every hour)
+      // This prevents stale data but adds database calls
+      const shouldRefresh = token.lastFetch && 
+        Date.now() - (token.lastFetch as number) > 60 * 60 * 1000; // 1 hour
       
-      // FIXED: Better ObjectId conversion handling
-      let objUserId;
+      if (shouldRefresh && token.email) {
+        console.log('JWT - Refreshing user data due to age');
+        try {
+          const userData = await fetchUserData(token.email as string);
+          token.isAdmin = userData.isAdmin;
+          token.lastFetch = Date.now();
+          // Update other fields as needed
+        } catch (error) {
+          console.error('JWT - Error refreshing user data:', error);
+        }
+      }
+
+      if (!token.lastFetch) {
+        token.lastFetch = Date.now();
+      }
+
+      console.log('🟢 JWT CALLBACK END\n');
+      return token;
+    },
+
+    // Session callback - shapes the session object
+    async session({ session, token }) {
+      console.log('🟡 SESSION CALLBACK START');
+      console.log('Session - Token:', JSON.stringify(token, null, 2));
+      
+      if (token && session.user) {
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
+        session.user.name = token.name as string;
+        session.user.image = token.image as string;
+        session.user.isAdmin = token.isAdmin as boolean;
+        session.user.createdAt = token.createdAt as Date;
+        // Add any other custom fields here
+      }
+
+      console.log('Session - Final session:', JSON.stringify(session, null, 2));
+      console.log('🟡 SESSION CALLBACK END\n');
+      return session;
+    },
+
+    // SignIn callback - handle user creation/updates
+    async signIn({ user, account, profile }) {
+      console.log('🔵 SIGNIN CALLBACK START');
+      console.log('SignIn - User:', JSON.stringify(user, null, 2));
+      console.log('SignIn - Account:', JSON.stringify(account, null, 2));
+      
       try {
-        objUserId = typeof userId === 'string' ? new ObjectId(userId) : userId;
-        console.log('SignIn - Converted objUserId:', objUserId);
+        await upsertUser(user);
+        console.log('✅ SignIn - User upserted successfully');
+        return true;
       } catch (error) {
-        console.error('❌ SignIn - Error converting userId to ObjectId:', error);
-        return;
+        console.error('❌ SignIn - Error upserting user:', error);
+        return false;
       }
-
-      const existingUser = await usersCollection.findOne({
-        _id: objUserId,
-      });
-
-      console.log('SignIn - Existing user found:', JSON.stringify(existingUser, null, 2));
-      console.log('SignIn - existingUser.isAdmin:', existingUser?.isAdmin);
-      console.log('SignIn - existingUser.isAdmin type:', typeof existingUser?.isAdmin);
-
-      if (existingUser) {
-        const updateData: Record<string, any> = {};
-
-        if (existingUser.isAdmin === undefined) {
-          console.log('SignIn - isAdmin is undefined, setting to false');
-          updateData.isAdmin = false;
-        } else {
-          console.log('SignIn - isAdmin already exists with value:', existingUser.isAdmin);
-        }
-
-        if (Object.keys(updateData).length > 0) {
-          console.log('SignIn - Updating user with data:', updateData);
-          await usersCollection.updateOne(
-            { _id: objUserId },
-            { $set: updateData }
-          );
-          console.log('✅ SignIn - User fields updated successfully');
-        } else {
-          console.log('SignIn - No updates needed');
-        }
-      } else {
-        console.log('SignIn - No existing user found');
-      }
-      
-      console.log('🟡 SIGNIN EVENT END\n');
     },
   },
 
@@ -130,6 +118,82 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
 };
+
+// Helper function to fetch user data from database
+async function fetchUserData(email: string) {
+  console.log('📥 Fetching user data for email:', email);
+  
+  const client = await clientPromise;
+  const db = client.db();
+  const usersCollection = db.collection("users");
+  
+  let user = await usersCollection.findOne({ email });
+  
+  if (!user) {
+    console.log('📥 User not found, this should not happen in normal flow');
+    throw new Error('User not found');
+  }
+  
+  console.log('📥 User data fetched:', JSON.stringify(user, null, 2));
+  
+  return {
+    id: user._id.toString(),
+    email: user.email,
+    name: user.name,
+    image: user.image,
+    isAdmin: user.isAdmin ?? false,
+    createdAt: user.createdAt,
+    // Add any other custom fields here
+  };
+}
+
+// Helper function to create or update user in database
+async function upsertUser(user: any) {
+  console.log('💾 Upserting user:', JSON.stringify(user, null, 2));
+  
+  const client = await clientPromise;
+  const db = client.db();
+  const usersCollection = db.collection("users");
+  
+  const existingUser = await usersCollection.findOne({ email: user.email });
+  
+  if (existingUser) {
+    console.log('💾 User exists, updating...');
+    const updateData: Record<string, any> = {};
+    
+    // Only update fields that might have changed
+    if (existingUser.name !== user.name) updateData.name = user.name;
+    if (existingUser.image !== user.image) updateData.image = user.image;
+    
+    // Ensure isAdmin field exists
+    if (existingUser.isAdmin === undefined) {
+      updateData.isAdmin = false;
+    }
+    
+    if (Object.keys(updateData).length > 0) {
+      updateData.updatedAt = new Date();
+      
+      await usersCollection.updateOne(
+        { email: user.email },
+        { $set: updateData }
+      );
+      console.log('✅ User updated with data:', updateData);
+    }
+  } else {
+    console.log('💾 Creating new user...');
+    const newUser = {
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      isAdmin: false, // Default value
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    
+    await usersCollection.insertOne(newUser);
+    console.log('✅ New user created:', newUser);
+  }
+}
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
