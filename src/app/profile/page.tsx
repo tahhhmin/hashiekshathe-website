@@ -1,10 +1,10 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import Styles from './page.module.css'
+import Styles from './page.module.css';
 
-import { BadgeCheck } from 'lucide-react'
+import { BadgeCheck } from 'lucide-react';
 import HorizontalDivider from "@/ui/dividers/HorizontalDivider";
 
 export default async function ProfilePage() {
@@ -25,7 +25,7 @@ export default async function ProfilePage() {
                 <div className={Styles.profileHeader}>
                     <div className={Styles.profileIdentity}> 
                         <Image
-                            src={image || 'www.image.com' }
+                            src={image || 'https://via.placeholder.com/96' }
                             width={96}
                             height={96}
                             alt="avatar"
@@ -46,15 +46,9 @@ export default async function ProfilePage() {
 
                     <div className={Styles.headerContent}> 
                         <div className={Styles.roleContainer}>
-                            {isDept && <div>
-                                {/* Department related content */}
-                            </div>}
-                            
-                            {isTeam && <div>
-                                {/* Team related content */}
-                            </div>}
+                            {isDept && <div>{/* Department related content */}</div>}
+                            {isTeam && <div>{/* Team related content */}</div>}
                         </div>
-                        {/* Institution Media links */}
                         <div className={Styles.bioContainer}>
                             <p>
                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
@@ -90,11 +84,8 @@ export default async function ProfilePage() {
                 </div>
                 
                 <div className={Styles.socialLinksCardsContainer}>
-                    <div>
-                        {/* Social links content */}
-                    </div>
+                    <div>{/* Social links content */}</div>
                 </div>
-
             </div>
         </section>
     );
