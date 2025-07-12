@@ -1,104 +1,116 @@
 // src/lib/authOptions.ts
 import GoogleProvider from "next-auth/providers/google";
 import type { NextAuthOptions } from "next-auth";
-import {
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  NEXTAUTH_SECRET,
-} from "@/lib/env";
 import clientPromise from "@/lib/mongoDB";
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    GoogleProvider({
-      clientId: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-    }),
-  ],
-  secret: NEXTAUTH_SECRET,
+export const authOptions = (): NextAuthOptions => {
+  // Environment variables are read at runtime, not build time
+  const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+  const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+  const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET;
 
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
-  },
+  if (!GOOGLE_CLIENT_ID) {
+    throw new Error("Missing environment variable: GOOGLE_CLIENT_ID");
+  }
+  if (!GOOGLE_CLIENT_SECRET) {
+    throw new Error("Missing environment variable: GOOGLE_CLIENT_SECRET");
+  }
+  if (!NEXTAUTH_SECRET) {
+    throw new Error("Missing environment variable: NEXTAUTH_SECRET");
+  }
 
-  callbacks: {
-    async jwt({ token, user, trigger }) {
-      console.log("🟢 JWT CALLBACK START");
-      console.log("JWT - Trigger:", trigger);
-      console.log("JWT - Token:", JSON.stringify(token, null, 2));
-      console.log("JWT - User:", JSON.stringify(user, null, 2));
+  return {
+    providers: [
+      GoogleProvider({
+        clientId: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
+      }),
+    ],
+    secret: NEXTAUTH_SECRET,
 
-      if (user) {
-        const userData = await fetchUserData(user.email!);
+    session: {
+      strategy: "jwt",
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+    },
 
-        token.id = userData.id;
-        token.email = userData.email;
-        token.name = userData.name;
-        token.image = userData.image;
-        token.isAdmin = userData.isAdmin;
-        token.createdAt = userData.createdAt;
-      }
+    callbacks: {
+      async jwt({ token, user, trigger }) {
+        console.log("🟢 JWT CALLBACK START");
+        console.log("JWT - Trigger:", trigger);
+        console.log("JWT - Token:", JSON.stringify(token, null, 2));
+        console.log("JWT - User:", JSON.stringify(user, null, 2));
 
-      const shouldRefresh =
-        token.lastFetch &&
-        Date.now() - (token.lastFetch as number) > 60 * 60 * 1000;
+        if (user) {
+          const userData = await fetchUserData(user.email!);
 
-      if (shouldRefresh && token.email) {
-        try {
-          const userData = await fetchUserData(token.email as string);
+          token.id = userData.id;
+          token.email = userData.email;
+          token.name = userData.name;
+          token.image = userData.image;
           token.isAdmin = userData.isAdmin;
-          token.lastFetch = Date.now();
-        } catch (error) {
-          console.error("JWT - Error refreshing user data:", error);
+          token.createdAt = userData.createdAt;
         }
-      }
 
-      if (!token.lastFetch) {
-        token.lastFetch = Date.now();
-      }
+        const shouldRefresh =
+          token.lastFetch &&
+          Date.now() - (token.lastFetch as number) > 60 * 60 * 1000;
 
-      console.log("🟢 JWT CALLBACK END\n");
-      return token;
+        if (shouldRefresh && token.email) {
+          try {
+            const userData = await fetchUserData(token.email as string);
+            token.isAdmin = userData.isAdmin;
+            token.lastFetch = Date.now();
+          } catch (error) {
+            console.error("JWT - Error refreshing user data:", error);
+          }
+        }
+
+        if (!token.lastFetch) {
+          token.lastFetch = Date.now();
+        }
+
+        console.log("🟢 JWT CALLBACK END\n");
+        return token;
+      },
+
+      async session({ session, token }) {
+        console.log("🟡 SESSION CALLBACK START");
+        console.log("Session - Token:", JSON.stringify(token, null, 2));
+
+        if (token && session.user) {
+          session.user.id = token.id as string;
+          session.user.email = token.email as string;
+          session.user.name = token.name as string;
+          session.user.image = token.image as string;
+          session.user.isAdmin = token.isAdmin as boolean;
+          session.user.createdAt = token.createdAt as Date;
+        }
+
+        console.log("Session - Final session:", JSON.stringify(session, null, 2));
+        console.log("🟡 SESSION CALLBACK END\n");
+        return session;
+      },
+
+      async signIn({ user, account }) {
+        console.log("🔵 SIGNIN CALLBACK START");
+        console.log("SignIn - User:", JSON.stringify(user, null, 2));
+        console.log("SignIn - Account:", JSON.stringify(account, null, 2));
+
+        try {
+          await upsertUser(user);
+          console.log("✅ SignIn - User upserted successfully");
+          return true;
+        } catch (error) {
+          console.error("❌ SignIn - Error upserting user:", error);
+          return false;
+        }
+      },
     },
 
-    async session({ session, token }) {
-      console.log("🟡 SESSION CALLBACK START");
-      console.log("Session - Token:", JSON.stringify(token, null, 2));
-
-      if (token && session.user) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
-        session.user.name = token.name as string;
-        session.user.image = token.image as string;
-        session.user.isAdmin = token.isAdmin as boolean;
-        session.user.createdAt = token.createdAt as Date;
-      }
-
-      console.log("Session - Final session:", JSON.stringify(session, null, 2));
-      console.log("🟡 SESSION CALLBACK END\n");
-      return session;
+    pages: {
+      signIn: "/login",
     },
-
-    async signIn({ user, account }) {
-      console.log("🔵 SIGNIN CALLBACK START");
-      console.log("SignIn - User:", JSON.stringify(user, null, 2));
-      console.log("SignIn - Account:", JSON.stringify(account, null, 2));
-
-      try {
-        await upsertUser(user);
-        console.log("✅ SignIn - User upserted successfully");
-        return true;
-      } catch (error) {
-        console.error("❌ SignIn - Error upserting user:", error);
-        return false;
-      }
-    },
-  },
-
-  pages: {
-    signIn: "/login",
-  },
+  };
 };
 
 // Fetch user data from MongoDB

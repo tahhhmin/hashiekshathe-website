@@ -1,4 +1,4 @@
-// Optional: Utility hook for easy session access
+
 // src/hooks/useAuth.ts
 import { useSession } from "next-auth/react";
 

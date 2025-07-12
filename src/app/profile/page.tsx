@@ -8,7 +8,7 @@ import { BadgeCheck } from 'lucide-react';
 import HorizontalDivider from "@/ui/dividers/HorizontalDivider";
 
 export default async function ProfilePage() {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions());
 
     if (!session) {
         redirect("/login");

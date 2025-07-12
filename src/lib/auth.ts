@@ -1,10 +1,9 @@
-// Optional: Server-side session helper
 // src/lib/auth.ts
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 
 export async function getServerAuthSession() {
-  return await getServerSession(authOptions);
+  return await getServerSession(authOptions());
 }
 
 export async function requireAuth() {
