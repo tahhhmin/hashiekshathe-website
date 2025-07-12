@@ -1,6 +1,5 @@
 .sidebarContainer {
-    width: 100%;
-    max-width: 250px;
+    width: 300px;
     height: 100vh;
     background-color: var(--color-card);
     display: flex;

@@ -15,10 +15,8 @@
     padding: 1rem;
 }
 .dashboardContent {
-    background-color: var(--color-card);
-
     height: 100%;
     margin: 0 1rem 1rem 1rem;
     border-radius: 12px;
-
+    overflow: hidden;
 }
