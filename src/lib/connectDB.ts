@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
 
-const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
-
-if (!MONGO_URI) {
-  throw new Error("Please define the MONGO_URI or MONGODB_URI environment variable");
-}
-
 // Define the cache interface
 interface MongooseCache {
   conn: mongoose.Connection | null;
@@ -25,6 +19,13 @@ if (!global._mongooseCache) {
 }
 
 export const connectDB = async (): Promise<mongoose.Connection> => {
+  // Get MongoDB URI at runtime, not at module load time
+  const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI;
+  
+  if (!MONGO_URI) {
+    throw new Error("Please define the MONGO_URI or MONGODB_URI environment variable");
+  }
+
   // Return existing connection if available
   if (cached.conn) {
     return cached.conn;
