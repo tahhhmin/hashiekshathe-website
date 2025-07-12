@@ -44,8 +44,12 @@ export async function POST(req: NextRequest) {
     await sendEmail('inquiryMessageConfirmation', { to: message.email });
 
     return NextResponse.json({ success: true, message: 'Message successfully verified and saved' });
-  } catch (error: any) {
-    console.error('Verification failed:', error);
-    return NextResponse.json({ success: false, message: error.message || 'Something went wrong' }, { status: 500 });
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error('Verification failed:', err);
+    return NextResponse.json(
+      { success: false, message: err.message || 'Something went wrong' },
+      { status: 500 }
+    );
   }
 }

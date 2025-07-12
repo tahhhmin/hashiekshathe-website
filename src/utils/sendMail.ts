@@ -56,8 +56,13 @@ export async function sendEmail(type: string, data: EmailData): Promise<void> {
     const info = await transporter.sendMail(mailOptions);
     console.log(`Email "${type}" sent to ${data.to}: ${info.messageId}`);
 
-  } catch (error: any) {
-    console.error(`Failed to send email (${type}) to ${data.to}:`, error.message);
-    throw new Error('Failed to send email');
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(`Failed to send email (${type}) to ${data.to}:`, error.message);
+      throw new Error('Failed to send email');
+    } else {
+      console.error(`Failed to send email (${type}) to ${data.to}:`, error);
+      throw new Error('Failed to send email');
+    }
   }
 }

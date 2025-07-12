@@ -3,7 +3,6 @@ import {
     faInstagram,
     faFacebook,
     faYoutube,
-    faXTwitter,
     faLinkedin,
 } from '@fortawesome/free-brands-svg-icons';
 
@@ -13,7 +12,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Logo from '../../../public/favicon-white.svg';
-import HorizontalDivider from '../dividers/HorizontalDivider';
 
 export default function Footer() {
     return (

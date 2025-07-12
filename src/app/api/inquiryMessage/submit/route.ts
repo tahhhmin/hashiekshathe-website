@@ -32,10 +32,11 @@ export async function POST(req: NextRequest) {
       verificationToken,
       verificationTokenExpiresAt,
     });
-  } catch (error: any) {
-    console.error('Error in /submit:', error);
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error('Error in /submit:', err);
     return NextResponse.json(
-      { success: false, message: error.message || 'Something went wrong' },
+      { success: false, message: err.message || 'Something went wrong' },
       { status: 500 }
     );
   }

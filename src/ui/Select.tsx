@@ -89,6 +89,7 @@ export default function SelectInput({
           aria-haspopup="listbox"
           aria-controls={`${name}-listbox`}
           aria-labelledby={`${name}-label`}
+          aria-required={required}  
           onClick={() => {
             if (!disabled) setIsOpen((prev) => !prev);
           }}

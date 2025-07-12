@@ -14,11 +14,10 @@ export default async function ProfilePage() {
         redirect("/login");
     }
 
-    const { name, email, image } = session.user || {};
+    const { name, image } = session.user || {};
 
-    const isDept = true
-    const isDeptTeam = false
-    const isTeam = false
+    const isDept = true;
+    const isTeam = false;
 
     return (
         <section className={Styles.profilePage}>
@@ -48,14 +47,14 @@ export default async function ProfilePage() {
                     <div className={Styles.headerContent}> 
                         <div className={Styles.roleContainer}>
                             {isDept && <div>
-
+                                {/* Department related content */}
                             </div>}
                             
                             {isTeam && <div>
-                                
+                                {/* Team related content */}
                             </div>}
                         </div>
-                {/* Institution Media links */}
+                        {/* Institution Media links */}
                         <div className={Styles.bioContainer}>
                             <p>
                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
@@ -77,7 +76,6 @@ export default async function ProfilePage() {
                 </div>
             </div>
 
-
             <div className={Styles.sideContainer}>
                 <div className={Styles.userOrgInfo}>
                     <div>
@@ -93,12 +91,11 @@ export default async function ProfilePage() {
                 
                 <div className={Styles.socialLinksCardsContainer}>
                     <div>
-                        
+                        {/* Social links content */}
                     </div>
-
                 </div>
 
             </div>
         </section>
-  );
+    );
 }

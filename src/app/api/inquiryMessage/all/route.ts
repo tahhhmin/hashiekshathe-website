@@ -1,10 +1,10 @@
 // GET all inquiry messages
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import ContactMessage from '@/models/InquiryMessage.model';
 import { connectDB } from '@/lib/connectDB';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     await connectDB();
     const messages = await ContactMessage.find().sort({ createdAt: -1 });
@@ -14,10 +14,11 @@ export async function GET(req: NextRequest) {
       count: messages.length,
       data: messages,
     });
-  } catch (error: any) {
-    console.error('Error fetching inquiry messages:', error);
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error('Error fetching inquiry messages:', err);
     return NextResponse.json(
-      { success: false, message: 'Failed to retrieve inquiry messages' },
+      { success: false, message: err.message || 'Failed to retrieve inquiry messages' },
       { status: 500 }
     );
   }

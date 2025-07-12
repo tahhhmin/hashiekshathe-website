@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import Styles from './VerificationCodeInput.module.css';
 
 interface VerificationCodeInputProps {
@@ -20,14 +20,14 @@ export default function VerificationCodeInput({
 }: VerificationCodeInputProps) {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const focusInput = (index: number) => {
+  const focusInput = useCallback((index: number) => {
     if (index < 0 || index >= length) return;
     const input = inputRefs.current[index];
     if (input) {
       input.focus();
       input.select();
     }
-  };
+  }, [length]);
 
   const handleInputChange = (index: number, val: string) => {
     if (!/^\d?$/.test(val)) return;
@@ -73,7 +73,7 @@ export default function VerificationCodeInput({
     if (autoFocus) {
       focusInput(0);
     }
-  }, [autoFocus]);
+  }, [autoFocus, focusInput]);
 
   return (
     <div className={Styles.otpContainer}>

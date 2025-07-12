@@ -8,38 +8,33 @@ export async function POST(req: NextRequest) {
     await connectDB();
 
     const {
-                    fullName,
-                    address,
-                    dob,
-                    gender,
-                    profileImageLink,
-                    email,
-                    phoneNumber,
-                    facebook,
-                    educationLevel,
-                    institution,
-                    institutionIdImage,
-                    whyJoin,
-                    wantsLeadership,
-                    preferredDepartment,
-                    specificRole,
-                    cvLink,
-                    previousExperience,
-                    workingLocation,
-                    skills,
-                    timeCommitment,
-                    interviewSchedule,
-                    referralSource,
+      fullName,
+      address,
+      dob,
+      gender,
+      profileImageLink,
+      email,
+      phoneNumber,
+      facebook,
+      educationLevel,
+      institution,
+      institutionIdImage,
+      whyJoin,
+      previousExperience,
+      workingLocation,
+      skills,
+      timeCommitment,
+      interviewSchedule,
+      referralSource,
     } = await req.json();
 
-    // Basic validation
-        if (
-            !fullName || !address || !dob || !gender || !profileImageLink ||
-            !email || !phoneNumber || !facebook ||
-            !educationLevel || !institution || !institutionIdImage || 
-            !whyJoin || !previousExperience || !workingLocation || !skills ||
-            !timeCommitment || !interviewSchedule || !referralSource
-        ) {
+    if (
+      !fullName || !address || !dob || !gender || !profileImageLink ||
+      !email || !phoneNumber || !facebook ||
+      !educationLevel || !institution || !institutionIdImage || 
+      !whyJoin || !previousExperience || !workingLocation || !skills ||
+      !timeCommitment || !interviewSchedule || !referralSource
+    ) {
       return NextResponse.json(
         { success: false, message: 'Please fill all required fields.' },
         { status: 400 }
@@ -49,7 +44,6 @@ export async function POST(req: NextRequest) {
     const verificationToken = generateVerificationToken();
     const verificationTokenExpiresAt = getVerificationTokenExpiry();
 
-    // Send verification email to the sender
     await sendEmail('registrationRequestVerificationCode', {
       to: email,
       code: verificationToken,
@@ -62,10 +56,11 @@ export async function POST(req: NextRequest) {
       verificationTokenExpiresAt,
     });
 
-  } catch (error: any) {
-    console.error('Error in /api/registrationRequest/submit:', error);
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error('Unknown error');
+    console.error('Error in /api/registrationRequest/submit:', err);
     return NextResponse.json(
-      { success: false, message: error.message || 'Something went wrong' },
+      { success: false, message: err.message || 'Something went wrong' },
       { status: 500 }
     );
   }

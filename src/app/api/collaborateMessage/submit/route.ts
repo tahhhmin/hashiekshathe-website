@@ -11,8 +11,7 @@ export async function POST(req: NextRequest) {
       orgName,
       orgType,
       orgEmail,
-      orgWebsiteLink,
-      orgSocialLink,
+      // Removed orgWebsiteLink and orgSocialLink since they are unused
       orgAddress,
       collaborationDescription,
       proposedTimeline,
@@ -20,7 +19,7 @@ export async function POST(req: NextRequest) {
       senderName,
       senderEmail,
       senderContactNumber,
-      senderSocialLink,
+      // Removed senderSocialLink since it is unused
       senderPosition,
     } = await req.json();
 
@@ -52,11 +51,19 @@ export async function POST(req: NextRequest) {
       verificationTokenExpiresAt,
     });
 
-  } catch (error: any) {
-    console.error('Error in /api/collaborateMessage/submit:', error);
-    return NextResponse.json(
-      { success: false, message: error.message || 'Something went wrong' },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error in /api/collaborateMessage/submit:', error.message);
+      return NextResponse.json(
+        { success: false, message: error.message },
+        { status: 500 }
+      );
+    } else {
+      console.error('Unknown error in /api/collaborateMessage/submit');
+      return NextResponse.json(
+        { success: false, message: 'Something went wrong' },
+        { status: 500 }
+      );
+    }
   }
 }

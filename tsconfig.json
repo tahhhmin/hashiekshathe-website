@@ -1,5 +1,3 @@
-// tsconfig.json
-
 {
   "compilerOptions": {
     "target": "ES2017",
@@ -24,16 +22,16 @@
       "@/*": ["./src/*"]
     },
     "typeRoots": [
-      "types",       
+      "./types",
       "./node_modules/@types"
     ]
   },
   "include": [
-  "next-env.d.ts",
-  "**/*.ts",
-  "**/*.tsx",
-  ".next/types/**/*.ts",
-  "types"
-],
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "types"
+  ],
   "exclude": ["node_modules"]
 }
