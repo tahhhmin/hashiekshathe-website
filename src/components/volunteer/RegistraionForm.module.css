@@ -1,0 +1,33 @@
+.FormContainer {
+    width: 100%;
+}
+.Form {
+    width: 100%;
+    background-color: var(--color-card);
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.formInput {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.formInputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.formFooter {
+    display: flex;
+    flex-direction: column;
+}
+.hiddenInputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}

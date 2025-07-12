@@ -31,4 +31,4 @@ const CollaborateMessageSchema = new mongoose.Schema(
 );
 
 export default mongoose.models.CollaborateMessage ||
-  mongoose.model('Collaborate message', CollaborateMessageSchema);
+mongoose.model('Collaborate message', CollaborateMessageSchema);

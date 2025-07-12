@@ -110,24 +110,24 @@ section {
 
 
 h1 {
-  font-family: var(--font-family);
-  font-size: var(--size-section-title);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+    font-family: var(--font-family);
+    font-size: var(--size-section-title);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
 }
 
 h2 {
-  font-family: var(--font-family);
-  font-size: var(--size-card-title);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
+    font-family: var(--font-family);
+    font-size: var(--size-card-title);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
 }
 
 h3 {
-  font-family: var(--font-family);
-  font-size: var(--size-card-subtitle);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
+    font-family: var(--font-family);
+    font-size: var(--size-card-subtitle);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
 }
 
 h4 {
@@ -187,10 +187,31 @@ label {
 
 
 
+.table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.records-table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  font-family: var(--font-family);
+  background-color: var(--color-background);
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
 
 
-
-
+.table-wrapper {
+    width: 100%;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on mobile */
+}
 
 
 
@@ -224,7 +245,8 @@ td {
     border-bottom: 1px solid var(--color-border);
     color: var(--color-text);
 }
-td:last-child {
+
+tr:last-child {
     border-bottom: none;
 }
 
@@ -242,19 +264,4 @@ td {
 tbody tr:hover {
     background-color: var(--color-card);
     transition: background-color 0.1s;
-}
-
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-}
-
-.loading-text {
-    font-family: var(--font-family);
-    font-size: var(--size-body);
-    font-weight: var(--font-weight-regular);
-    text-align: left;
-    color: var(--color-text);
-
-    height: 100vh;
 }

@@ -35,7 +35,7 @@ export default function page() {
                     </p>
                 </div>
                 <div className={Styles.footer}>
-                    <Link href="/contact/expenditures" className={Styles.footer}>
+                    <Link href="/records/expenditures" className={Styles.footer}>
                         <Button
                             variant="primary"
                             label="View Expenditures"

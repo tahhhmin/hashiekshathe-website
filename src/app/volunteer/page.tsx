@@ -20,7 +20,6 @@ export default function Page() {
                             variant="primary"
                             label="Proceed to Register"
                             showIcon
-
                         />
                     </Link>
                 </div>

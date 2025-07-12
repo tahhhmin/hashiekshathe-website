@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema(
         // User Secrets
         phoneNumber: { type: String, trim: true, match: /^\+?[0-9\s\-]{7,15}$/, required: false },
         dateOfBirth: { type: Date, required: false },
+        age: { type: Number, required: false },
         address: { type: String, trim: true, required: false },
         gender: { type: String, enum: ["male", "female", "other"], required: false },
 
@@ -62,6 +63,10 @@ const userSchema = new mongoose.Schema(
 
         isSuspended: { type: Boolean, default: false },
         suspensionReason: { type: String, trim: true },
+
+        emergencyContactName: { type: String, required: false },
+        emergencyContactPhone: { type: String, required: false },
+        preferredContactMethod: { type: String, enum: ['email', 'phone', 'facebook'], default: 'email' },
 
         lastLogin: { type: Date },
         loginHistory: [

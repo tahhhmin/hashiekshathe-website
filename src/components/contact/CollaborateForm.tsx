@@ -5,6 +5,7 @@ import Input from '@/ui/Input';
 import Button from '@/ui/Button';
 import Styles from './CollaborateForm.module.css';
 import VerificationCodeInput from '@/ui/VerificationCodeInput';
+import Textarea from '@/ui/Textarea';
 
 function CollaborateForm() {
     const [orgName, setOrgName] = useState('');
@@ -231,16 +232,10 @@ function CollaborateForm() {
                     {/* Collaboration Details */}
                     <div className={Styles.formInputGroup}>
                     <h3>Collaboration Details</h3>
-                    <Input
-                        label="Collaboration Description"
-                        name="collabDescription"
-                        type="text"
+                    <Textarea label="Why do you want to join?" name="whyJoin"
                         value={collaborationDescription}
                         onChange={(e) => setCollaborationDescription(e.target.value)}
-                        showIcon
-                        icon="FileText"
-                        showHelpText
-                        helpText="Describe what kind of collaboration you are proposing."
+                        showHelpText helpText="Describe what kind of collaboration you are proposing."
                         placeholder="e.g., Joint food distribution during Eid"
                         required
                     />
